@@ -1,5 +1,8 @@
 <script type="text/javascript">
 
+        //User Variables for Results and Timescale
+        var UResults = 2000;
+        var UTimescale = 20;
 
         // user's timezone offset
         var myOffset = new Date().getTimezoneOffset();
@@ -19,7 +22,7 @@
           var last_date;
 
           // get the data with a webservice call
-          $.getJSON('https://thingspeak.com/channels/49870/field/1.json?callback=?&amp;offset=0&amp;timescale=60&amp;results=6000', function(data) {
+          $.getJSON('https://thingspeak.com/channels/49870/field/1.json?callback=?&amp;offset=0&amp;timescale='+UTimescale+'&amp;results='+UResults, function(data) {
 
             // if no access
             if (data == '-1') { $('#chart-container').append('This channel is not public.  To embed charts, the channel must be public or a read key must be specified.'); }
@@ -48,16 +51,16 @@
                     //if dynamic and no "timeslice" options are set
                     //   GAK 02/16/2013 Let's try to add the last "average" slice if params[:average]
 
-                    var url = 'https://thingspeak.com/channels/49870/feed/last.json?callback=?&amp;offset=0&amp;location=true&amp;timescale=60&amp;results=6000' ;
+                    var url = 'https://thingspeak.com/channels/49870/feed/last.json?callback=?&amp;offset=0&amp;location=true&amp;timescale='+UTimescale+'&amp;results='+UResults ;
                     if ("".length > 0) {
-                      url = 'https://thingspeak.com/channels/49870/feed/last_average.json?callback=?&amp;offset=0&amp;location=true&amp;average=&amp;timescale=60&amp;results=6000' ;
+                      url = 'https://thingspeak.com/channels/49870/feed/last_average.json?callback=?&amp;offset=0&amp;location=true&amp;average=&amp;timescale='+UTimescale+'&amp;results='+UResults ;
                     } else if ("".length > 0) {
-                      url = 'https://thingspeak.com/channels/49870/feed/last_median.json?callback=?&amp;offset=0&amp;location=true&amp;median=&amp;timescale=60&amp;results=6000' ;
+                      url = 'https://thingspeak.com/channels/49870/feed/last_median.json?callback=?&amp;offset=0&amp;location=true&amp;median=&amp;timescale='+UTimescale+'&amp;results='+UResults ;
                     } else if ("".length > 0) {
-                      url = 'https://thingspeak.com/channels/49870/feed/last_sum.json?callback=?&amp;offset=0&amp;location=true&amp;sum=&amp;timescale=60&amp;results=6000' ;
+                      url = 'https://thingspeak.com/channels/49870/feed/last_sum.json?callback=?&amp;offset=0&amp;location=true&amp;sum=&amp;timescale='+UTimescale+'&amp;results='+UResults ;
                     }
 
-                    if ('true' === 'true' && ('60'.length < 1)) {
+                    if ('true' === 'true' && (UTimescale.length < 1)) {
                       // push data every 15 seconds
                       setInterval(function() {
                         // get the data with a webservice call if we're just getting the last channel
@@ -81,7 +84,7 @@
 
                             //if push is requested in parameters
                             // then if results is and data.length is < results, shift = false
-                            var results = 6000;
+                            var results = UResults;
 
                             if ( results  && dynamicChart.series[0].data.length+1 >= results )   {
                               shift = true ;
