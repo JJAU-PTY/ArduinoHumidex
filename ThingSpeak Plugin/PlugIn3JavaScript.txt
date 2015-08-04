@@ -1,8 +1,8 @@
 <script type="text/javascript">
-
+  
         //User Variables for Results and Timescale
-        var UResults = 2000;
-        var UTimescale = 20;
+        var UResults = 3000;
+        var UTimescale = 30;
 
         // user's timezone offset
         var myOffset = new Date().getTimezoneOffset();
@@ -22,7 +22,7 @@
           var last_date;
 
           // get the data with a webservice call
-          $.getJSON('https://thingspeak.com/channels/49870/field/1.json?callback=?&amp;offset=0&amp;timescale='+UTimescale+'&amp;results='+UResults, function(data) {
+          $.getJSON('https://thingspeak.com/channels/49870/field/3.json?callback=?&amp;offset=0&amp;timescale='+UTimescale+'&amp;results='+UResults, function(data) {
 
             // if no access
             if (data == '-1') { $('#chart-container').append('This channel is not public.  To embed charts, the channel must be public or a read key must be specified.'); }
@@ -31,7 +31,7 @@
             $.each(data.feeds, function() {
                var p = new Highcharts.Point();
                // set the proper values
-               var v = this.field1;
+               var v = this.field3;
                p.x = getChartDate(this.created_at);
                p.y = parseFloat(v);
                // add location if possible
@@ -66,11 +66,11 @@
                         // get the data with a webservice call if we're just getting the last channel
                         $.getJSON(url, function(data) {
                           // if data exists
-                          if (data && data.field1) {
+                          if (data && data.field3) {
 
                             var p = new Highcharts.Point();
                             // set the proper values
-                            var v = data.field1;
+                            var v = data.field3;
 
                             p.x = getChartDate(data.created_at);
                             p.y = parseFloat(v);
@@ -109,16 +109,16 @@
           },
           plotOptions: {
             line: {
-              color: 'DarkRed'
+              color: 'DarkGreen'
             },
             bar: {
-              color: 'DarkRed'
+              color: 'DarkGreen'
             },
             column: {
-              color: 'DarkRed'
+              color: 'DarkGreen'
             },
             spline: {
-              color: 'DarkRed'
+              color: 'DarkGreen'
             },
             series: {
               marker: {
@@ -158,7 +158,7 @@
               enabled: false
           },
           series: [
-            { name: data.channel.field1 }
+            { name: data.channel.field3 }
           ],
           credits: {
               text: 'ThingSpeak.com',
@@ -171,9 +171,9 @@
             chartOptions.series[0].data = chartData;
 
             // set chart labels here so that decoding occurs properly
-            chartOptions.title.text = decodeURIComponent('Temperature%20%2F%20Longer');
+            chartOptions.title.text = decodeURIComponent('Humidity%20%25%20%2F%20Longer');
             chartOptions.xAxis.title.text = 'Date';
-            chartOptions.yAxis.title.text = data.channel.field1;
+            chartOptions.yAxis.title.text = data.channel.field3;
 
             // draw the chart
             var dynamicChart = new Highcharts.Chart(chartOptions);
@@ -187,5 +187,5 @@
 
       }); // end document.ready
 
-  
 </script>
+
