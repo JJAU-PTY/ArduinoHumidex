@@ -1,0 +1,192 @@
+<script type="text/javascript">
+  
+        //User Variables for Results and Timescale
+        var UResults = 3000;
+        var UTimescale = 30;
+
+        // user's timezone offset
+        var myOffset = new Date().getTimezoneOffset();
+
+        // converts date format from JSON
+        function getChartDate(d) {
+          // offset in minutes is converted to milliseconds and subtracted so that chart's x-axis is correct
+          return Date.parse(d) - (myOffset * 60000);
+        }
+
+        $(document).on('page:load ready', function() {
+          // blank array for holding chart data
+          var chartData = [];
+          // variable for the local date in milliseconds
+          var localDate;
+          // variable for the last date added to the chart
+          var last_date;
+
+          // get the data with a webservice call
+          $.getJSON('https://thingspeak.com/channels/49870/field/4.json?callback=?&amp;offset=0&amp;timescale='+UTimescale+'&amp;results='+UResults, function(data) {
+
+            // if no access
+            if (data == '-1') { $('#chart-container').append('This channel is not public.  To embed charts, the channel must be public or a read key must be specified.'); }
+
+            // iterate through each feed
+            $.each(data.feeds, function() {
+               var p = new Highcharts.Point();
+               // set the proper values
+               var v = this.field4;
+               p.x = getChartDate(this.created_at);
+               p.y = parseFloat(v);
+               // add location if possible
+               if (this.location) { p.name = this.location; }
+               // if a numerical value exists add it
+               if (!isNaN(parseInt(v))) { chartData.push(p); }
+            });
+
+            // specify the chart options
+            var chartOptions = {
+              chart: {
+                renderTo: 'chart-container',
+                defaultSeriesType: 'line',
+                backgroundColor: '#ffffff',
+                events: {
+                  load: function() {
+                    //if dynamic and no "timeslice" options are set
+                    //   GAK 02/16/2013 Let's try to add the last "average" slice if params[:average]
+
+                    var url = 'https://thingspeak.com/channels/49870/feed/last.json?callback=?&amp;offset=0&amp;location=true&amp;timescale='+UTimescale+'&amp;results='+UResults ;
+                    if ("".length > 0) {
+                      url = 'https://thingspeak.com/channels/49870/feed/last_average.json?callback=?&amp;offset=0&amp;location=true&amp;average=&amp;timescale='+UTimescale+'&amp;results='+UResults ;
+                    } else if ("".length > 0) {
+                      url = 'https://thingspeak.com/channels/49870/feed/last_median.json?callback=?&amp;offset=0&amp;location=true&amp;median=&amp;timescale='+UTimescale+'&amp;results='+UResults ;
+                    } else if ("".length > 0) {
+                      url = 'https://thingspeak.com/channels/49870/feed/last_sum.json?callback=?&amp;offset=0&amp;location=true&amp;sum=&amp;timescale='+UTimescale+'&amp;results='+UResults ;
+                    }
+
+                    if ('true' === 'true' && (UTimescale.length < 1)) {
+                      // push data every 15 seconds
+                      setInterval(function() {
+                        // get the data with a webservice call if we're just getting the last channel
+                        $.getJSON(url, function(data) {
+                          // if data exists
+                          if (data && data.field4) {
+
+                            var p = new Highcharts.Point();
+                            // set the proper values
+                            var v = data.field4;
+
+                            p.x = getChartDate(data.created_at);
+                            p.y = parseFloat(v);
+                            // add location if possible
+                            if (data.location) { p.name = data.location; }
+                            // get the last date if possible
+                            if (dynamicChart.series[0].data.length > 0) {
+                              last_date = dynamicChart.series[0].data[dynamicChart.series[0].data.length-1].x;
+                            }
+                            var shift = false ; //default for shift
+
+                            //if push is requested in parameters
+                            // then if results is and data.length is < results, shift = false
+                            var results = UResults;
+
+                            if ( results  && dynamicChart.series[0].data.length+1 >= results )   {
+                              shift = true ;
+                            }
+                            // if a numerical value exists and it is a new date, add it
+                            if (!isNaN(parseInt(v)) && (p.x != last_date)) {
+                              dynamicChart.series[0].addPoint(p, true, shift);
+                            }
+                            else {
+                              dynamicChart.series[0].data[dynamicChart.series[0].data.length-1].update(p);
+                            }
+                        }
+                      });
+
+                  }, 15000);
+              }
+            }
+              }
+          },
+          title: {
+              text: ''
+          },
+          plotOptions: {
+            line: {
+              color: 'Grey'
+            },
+            bar: {
+              color: 'Grey'
+            },
+            column: {
+              color: 'Grey'
+            },
+            spline: {
+              color: 'Grey'
+            },
+            series: {
+              marker: {
+                radius: 3
+              },
+              animation: true,
+              step: false,
+              borderWidth: 0,
+              turboThreshold: 0
+            }
+          },
+          tooltip: {
+              // reformat the tooltips so that local times are displayed
+              formatter: function() {
+            var d = new Date(this.x + (myOffset*60000));
+            var n = (this.point.name === undefined) ? '' : '<br/>' + this.point.name;
+            return this.series.name + ':<b>' + this.y + '</b>' + n + '<br/>' + d.toDateString() + '<br/>' + d.toTimeString().replace(/\(.*\)/, "");
+              }
+          },
+          xAxis: {
+              type: 'datetime',
+              title: {
+            text: 'test'
+              }
+          },
+          yAxis: {
+            title: {
+              text: ''
+            },
+            min: null ,
+            max: null
+          },
+          exporting: {
+              enabled: false
+          },
+          legend: {
+              enabled: false
+          },
+          series: [
+            { name: data.channel.field4 }
+          ],
+          credits: {
+              text: 'ThingSpeak.com',
+              href: 'https://thingspeak.com/',
+              style: { color: '#D62020' }
+          }
+        };
+
+            // add the data to the chart
+            chartOptions.series[0].data = chartData;
+
+            // set chart labels here so that decoding occurs properly
+            chartOptions.title.text = decodeURIComponent('Calculated%20Dew%20Point%20%2F%20Longer');
+            chartOptions.xAxis.title.text = 'Date';
+            chartOptions.yAxis.title.text = data.channel.field4;
+
+            // draw the chart
+            var dynamicChart = new Highcharts.Chart(chartOptions);
+
+        // end getJSON success
+        })
+        // chained to getjson, on error
+        .error(function() {
+          $('#chart-container').html('Invalid Channel.');
+        });
+
+      }); // end document.ready
+
+  
+</script>
+
