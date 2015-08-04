@@ -132,7 +132,9 @@ void setup() {
   Serial.println(F(" %"));
   Serial.print(F("DHT Temperature: "));
   Serial.print(t);
-  Serial.println(F(" *C"));
+  Serial.print(F(" deg C, "));
+  Serial.print((9.0 / 5.0)*t + 32.0, 2);
+  Serial.println(F(" deg F."));
   Serial.print(F("BMP180 provided altitude: "));
   Serial.print(ALTITUDE, 0);
   Serial.println(F(" meters"));
@@ -152,7 +154,9 @@ void setup() {
       // Print out the measurement:
       Serial.print(F("BMP180 temperature: "));
       Serial.print(T, 2);
-      Serial.println(F(" deg C"));
+      Serial.print(" deg C, ");
+      Serial.print((9.0 / 5.0)*T + 32.0, 2);
+      Serial.println(" deg F");
 
       // Start a pressure measurement:
       // The parameter is the oversampling setting, from 0 to 3 (highest res, longest wait).
@@ -213,8 +217,11 @@ void setup() {
   }
   //Print of Dewpoint and Humidex values
   Pt = dewPoint(T, h);
-  Serial.print(F("Dew Point: "));
-  Serial.println(Pt);
+  Serial.print(F("Calculated Dew Point: "));
+  Serial.print(Pt);
+  Serial.print(F(" deg C, "));
+  Serial.print((9.0 / 5.0)*Pt + 32.0, 2);
+  Serial.println(F(" deg F"));  
   humidex = calculate_humidex(T, h);
   Serial.print(F("Humidex: "));
   Serial.println(humidex);
@@ -302,17 +309,25 @@ void loop() {
   Serial.print(p0, 2);
   Serial.println(F(" mb"));
   Serial.print(F("BMP180 temperature: "));
-  Serial.print(T);
-  Serial.println(F(" deg C"));
+  Serial.print(T, 2);
+  Serial.print(F(" deg C, "));
+  Serial.print((9.0 / 5.0)*T + 32.0, 2);
+  Serial.println(F(" deg F"));
   Serial.print(F("DHT Temperature: "));
-  Serial.println(t);
+  Serial.print(t);
+  Serial.print(F(" deg C, "));
+  Serial.print((9.0 / 5.0)*t + 32.0, 2);
+  Serial.println(F(" deg F"));
   Serial.print(F("DHT Humidity: "));
   Serial.println(h);
   Serial.print(F("Diference in temperature between BMP180-DHT sensors: "));
   Serial.println((T - t));
   Pt = dewPoint(T, h);
   Serial.print(F("Calculated Dew Point: "));
-  Serial.println(Pt);
+  Serial.print(Pt);
+  Serial.print(F(" deg C, "));
+  Serial.print((9.0 / 5.0)*Pt + 32.0, 2);
+  Serial.println(F(" deg F"));  
   humidex = calculate_humidex(T, h);
   Serial.print(F("Calculated Humidex: "));
   Serial.println(humidex);
@@ -324,9 +339,14 @@ void loop() {
   analogWrite(ledG, THumidex.G);
   analogWrite(ledB, THumidex.B);
   delay(500); //Half Second delay
-
+  
   // ----------------------------------
   //Conversion of Double values to Char and then to String
+  /*
+   * Send fahrenheit values with this code:
+   * T = ((9.0 / 5.0)*T + 32.0);
+   * Pt = ((9.0 / 5.0)*Pt + 32.0);
+   */
   T_send = dtostrf(T, 0, 5, T_buffer);
   P_send = dtostrf(P, 0, 5, P_buffer);
   //  p0_send = dtostrf(P, 0, 5, p0_buffer); (Not Using)
