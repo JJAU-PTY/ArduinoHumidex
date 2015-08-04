@@ -333,7 +333,7 @@ void loop() {
   h_send = dtostrf(h, 0, 5, h_buffer);
   Pt_send = dtostrf(Pt, 0, 5, Pt_buffer);
   humidex_send = dtostrf(humidex, 0, 5, humidex_buffer);
-  delay(500); //Pausa medio segundo para permitir conversion correcta
+  delay(500); //Half second pause before updating to the server
 
   // ----------------------------------
   //Update ThingSpeak
@@ -347,11 +347,11 @@ void loop() {
   }
   lastConnected = client.connected();
 
-  delay(5000); //Pausa obligatoria para dejar que el Ethernet Shield se comunique bien con el arduino
+  delay(5000); //Obligatory delay to allow the server send its data to the Arduino
   if (client.available()) {
     while (client.available()) {
       textserver = client.read();
-      Serial.print(textserver); //Print de datos enviados del servidor al arduino
+      Serial.print(textserver); //Print the data from the server
     }
 
   }
