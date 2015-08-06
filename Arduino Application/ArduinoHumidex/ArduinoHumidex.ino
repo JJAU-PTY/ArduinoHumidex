@@ -12,6 +12,7 @@
  * http://www.instructables.com/id/Send-sensor-data-DHT11-BMP180-to-ThingSpeak-with-a/step2/The-Program/
  * http://www.ccohs.ca/oshanswers/phys_agents/humidex.html
  * https://www.electronicsblog.net/arduino-based-temperature-and-humidityhumidex-meter-with-dht22-sensor-and-color-lcd/
+ * http://forum.arduino.cc/index.php?topic=85523.0
  */
 
 //Ethernet libraries
