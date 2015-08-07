@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
         //User Variables for Results and Timescale
-        var UResults = 3000;
+        var UResults = 3500;
         var UTimescale = 30;
 
         // user's timezone offset
@@ -73,7 +73,7 @@
                             var v = data.field1;
 
                             p.x = getChartDate(data.created_at);
-                            p.y = parseFloat(v);
+                            p.y = parseFloat(v,2);
                             // add location if possible
                             if (data.location) { p.name = data.location; }
                             // get the last date if possible

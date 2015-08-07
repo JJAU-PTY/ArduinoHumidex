@@ -1,7 +1,7 @@
 <script type="text/javascript">
   
         //User Variables for Results and Timescale
-        var UResults = 3000;
+        var UResults = 3500;
         var UTimescale = 30;
 
         // user's timezone offset
