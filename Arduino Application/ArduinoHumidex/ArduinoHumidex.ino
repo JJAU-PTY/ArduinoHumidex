@@ -12,7 +12,6 @@
  * http://www.instructables.com/id/Send-sensor-data-DHT11-BMP180-to-ThingSpeak-with-a/step2/The-Program/
  * http://www.ccohs.ca/oshanswers/phys_agents/humidex.html
  * https://www.electronicsblog.net/arduino-based-temperature-and-humidityhumidex-meter-with-dht22-sensor-and-color-lcd/
- * http://forum.arduino.cc/index.php?topic=85523.0
  */
 
 //Ethernet libraries
@@ -300,41 +299,15 @@ void loop() {
     delay(2000);
     return;
   }
-
-  // ----------------------------------
-  //Values Serial Print
-  Serial.print(F("Absolute pressure: "));
-  Serial.print(P, 2);
-  Serial.println(F(" mb"));
-  Serial.print(F("Relative (sea-level) pressure: "));
-  Serial.print(p0, 2);
-  Serial.println(F(" mb"));
-  Serial.print(F("BMP180 temperature: "));
-  Serial.print(T, 2);
-  Serial.print(F(" deg C, "));
-  Serial.print((9.0 / 5.0)*T + 32.0, 2);
-  Serial.println(F(" deg F"));
-  Serial.print(F("DHT Temperature: "));
-  Serial.print(t);
-  Serial.print(F(" deg C, "));
-  Serial.print((9.0 / 5.0)*t + 32.0, 2);
-  Serial.println(F(" deg F"));
-  Serial.print(F("DHT Humidity: "));
-  Serial.println(h);
-  Serial.print(F("Diference in temperature between BMP180-DHT sensors: "));
-  Serial.println((T - t));
+  
+  // Variables Calculation
   Pt = dewPoint(T, h);
-  Serial.print(F("Calculated Dew Point: "));
-  Serial.print(Pt);
-  Serial.print(F(" deg C, "));
-  Serial.print((9.0 / 5.0)*Pt + 32.0, 2);
-  Serial.println(F(" deg F"));  
   humidex = calculate_humidex(T, h);
-  Serial.print(F("Calculated Humidex: "));
-  Serial.println(humidex);
   TCHumidex(humidex);
-  Serial.print(F("Comfort: "));
-  Serial.println(THumidex.Sens);
+
+  //Variables serial print
+  SerialPrints();
+  // ----------------------------------
   //LED Ilumination
   analogWrite(ledR, THumidex.R);
   analogWrite(ledG, THumidex.G);
