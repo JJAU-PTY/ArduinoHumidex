@@ -8,4 +8,5 @@ Currently LIVE on: https://thingspeak.com/channels/49870
 About HUMIDEX: http://www.ccohs.ca/oshanswers/phys_agents/humidex.html
 
 Contact me @ joaquin.arosemena.507@gmail.com
+
 Github page: https://github.com/JJAU-PTY/ArduinoHumidex
