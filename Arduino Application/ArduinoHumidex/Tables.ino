@@ -14,7 +14,7 @@ void TCHumidex (double Hdex) {
   }
   if ((Hdex > 23.00) && (Hdex <= 26.00)) {
     THumidex.R = 0;
-    THumidex.G = 255;
+    THumidex.G = 128;
     THumidex.B = 255;
     THumidex.Sens = (F("Very comfortable"));
   }
@@ -26,12 +26,12 @@ void TCHumidex (double Hdex) {
   }
   if ((Hdex > 30.00) && (Hdex <= 39.00)) {
     THumidex.R = 64;
-    THumidex.G = 192;
+    THumidex.G = 144;
     THumidex.B = 0;
     THumidex.Sens = (F("Disconfort / Hot Feeling"));
   }
   if ((Hdex > 39.00) && (Hdex <= 45.00)) {
-    THumidex.R = 192;
+    THumidex.R = 128;
     THumidex.G = 128;
     THumidex.B = 0;
     THumidex.Sens = (F("Great disconfort / Avoid exertion"));
