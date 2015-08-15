@@ -1,5 +1,6 @@
 /*
  * Created: August 4, 2015 by Joaquin Arosemena (joaquin.arosemena.507@gmail.com)
+ * Github Code: https://github.com/JJAU-PTY/ArduinoHumidex/
  * LIVE Example: https://thingspeak.com/channels/49870
  * References
  * https://learn.adafruit.com/memories-of-an-arduino/optimizing-sram
