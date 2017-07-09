@@ -43,7 +43,7 @@ long lastConnectionTime = 0;
 boolean lastConnected = false;
 int failedCounter = 0;
 char textserver;
-unsigned int WaitTime = 10000; //Aditional wait time to the obligatory 20 seconds on the code
+unsigned int WaitTime = 50000; //Aditional wait time to make each cycle go arround 1 minute
 
 //Characters Buffers To Convert from Double
 char T_buffer[15]; // Temperature Buffer
@@ -239,7 +239,7 @@ void loop() {
   // Disconnect from ThingSpeak
   if (!client.connected() && lastConnected)
   {
-    Serial.println(F("...desconectado.\n"));
+    Serial.println(F("...disconnected.\n"));
     client.stop();
   }
   delay(15000); //15 seconds delay (Obligatory delay for the Thingspeak server)
