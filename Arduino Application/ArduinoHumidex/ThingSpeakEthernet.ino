@@ -46,7 +46,7 @@ void updateThingSpeak(String tsData) {
     lastConnectionTime = millis();
     if (client.connected())
     {
-      Serial.print(F("Enviando a ThingSpeak...\n\n"));
+      Serial.print(F("Sending to ThingSpeak...\n\n"));
       failedCounter = 0;
     }
     else
